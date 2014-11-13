@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.codehaus.sonar-plugins</groupId>
+    <artifactId>parent</artifactId>
+    <version>18</version>
+  </parent>
+
+  <groupId>org.codehaus.sonar-plugins.ndpend</groupId>
+  <artifactId>sonar-ndepend-plugin</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>sonar-plugin</packaging>
+
+  <name>SonarQube NDepend Plugin</name>
+  <description>Enables the use of NDepend in sonar.</description>
+  <url>http://docs.codehaus.org/display/SONAR/ReSharper+Plugin</url>
+  <inceptionYear>2014</inceptionYear>
+  <organization>
+    <name>Criteo</name>
+    <url>http://www.criteolabs.com</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU LGPL 3</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>p.bruneton</id>
+      <name>Patrick Bruneton</name>
+      <organization>http://www.labs.criteo.com</organization>
+    </developer>
+    <developer>
+      <id>cupcicm</id>
+      <name>Manu Cupcic</name>
+      <organization>http://www.labs.criteo.com</organization>
+    </developer>
+    <developer>
+      <id>debanne</id>
+      <name>Emmanuel Debanne</name>
+      <organization>http://www.labs.criteo.com</organization>
+    </developer>
+    <developer>
+      <id>dopushk3</id>
+      <name>Francois Visconte</name>
+      <organization>http://www.labs.criteo.com</organization>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git@github.com:cupcicm/sonar-ndepend.git</connection>
+    <developerConnection>scm:git:git@github.com:cupcicm/sonar-ndepend.git</developerConnection>
+    <url>https://github.com/cupcicm/sonar-ndepend</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <sonar.pluginName>NDepend</sonar.pluginName>
+    <sonar.pluginClass>org.sonar.plugins.ndepend.NdependPlugin</sonar.pluginClass>
+    <sonarqube.version>3.7</sonarqube.version>
+
+    <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <scope>provided</scope>
+      <version>${sonarqube.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <scope>test</scope>
+      <version>2.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+      <version>4.10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert</artifactId>
+      <scope>test</scope>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <scope>test</scope>
+      <version>1.9.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-plugin-size</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>verify</phase>
+            <configuration>
+              <rules>
+                <requireFilesSize>
+                  <maxsize>42000</maxsize>
+                  <minsize>32</minsize>
+                  <files>
+                    <file>${project.build.directory}/${project.build.finalName}.jar</file>
+                  </files>
+                </requireFilesSize>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
