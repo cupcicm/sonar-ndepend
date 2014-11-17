@@ -33,7 +33,7 @@ public class NdependRulesDefinition implements RulesDefinition {
 
   @Override
   public void define(Context context) {
-    NewRepository repository = context.createRepository(NDependConfig.REPOSITORY_KEY, NDependConfig.LANGUAGE_KEY);
+    NewRepository repository = context.createRepository(NdependConfig.REPOSITORY_KEY, NdependConfig.LANGUAGE_KEY);
     repository.setName("NDepend - C#");
     InputStream stream = getClass().getResourceAsStream("/org/sonar/plugins/ndepend/rules.xml");
     xmlLoader.load(repository, new InputStreamReader(stream));

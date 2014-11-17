@@ -34,7 +34,7 @@ public class NdependRulesDefinitionTest {
     NdependRulesDefinition definition = new NdependRulesDefinition(new RulesDefinitionXmlLoader());
 
     definition.define(context);
-    Repository repo = context.repository(NDependConfig.REPOSITORY_KEY);
+    Repository repo = context.repository(NdependConfig.REPOSITORY_KEY);
 
     List<RulesDefinition.Rule> rules = repo.rules();
     assertThat(rules.size()).isEqualTo(2);

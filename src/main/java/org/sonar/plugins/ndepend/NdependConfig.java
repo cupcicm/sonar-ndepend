@@ -17,9 +17,9 @@
  */
 package org.sonar.plugins.ndepend;
 
-public class NDependConfig {
+public class NdependConfig {
 
-    public static final String LANGUAGE_KEY = "cs";
+  public static final String LANGUAGE_KEY = "cs";
 
-    public static final String REPOSITORY_KEY = "cs-ndepend";
+  public static final String REPOSITORY_KEY = "cs-ndepend";
 }
