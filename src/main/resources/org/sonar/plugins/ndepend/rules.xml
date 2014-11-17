@@ -1,6 +1,6 @@
 <rules>
   <rule key="MethodsWithTooManyParameters">
-    <priority>CRITICAL</priority>
+    <severity>CRITICAL</severity>
     <name><![CDATA[Methods with too many parameters]]></name>
     <group>Code Quality</group>
     <scope>method</scope>
@@ -8,7 +8,7 @@
     <description><![CDATA[Methods with too many parameters]]></description>
   </rule>
   <rule key="MethodsTooLong">
-    <priority>MINOR</priority>
+    <severity>MINOR</severity>
     <name><![CDATA[Too many lines in method]]></name>
     <group>Code Quality</group>
     <scope>method</scope>
