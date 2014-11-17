@@ -22,4 +22,9 @@ public class NdependConfig {
   public static final String LANGUAGE_KEY = "cs";
 
   public static final String REPOSITORY_KEY = "cs-ndepend";
+
+  public static final String PROJECT_PATH_PROPERTY_KEY = "sonar.ndepend.projectPath";
+  public static final String NDEPEND_PATH_PROPERTY_KEY = "sonar.ndepend.ndependPath";
+
+  public static final String CATEGORY = "Ndepend";
 }

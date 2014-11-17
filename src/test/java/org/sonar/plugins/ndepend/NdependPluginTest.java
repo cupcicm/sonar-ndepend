@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.sonar.api.config.PropertyDefinition;
-
 import com.google.common.collect.ImmutableSet;
 
 
