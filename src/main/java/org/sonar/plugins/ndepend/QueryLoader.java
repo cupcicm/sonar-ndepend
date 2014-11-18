@@ -18,7 +18,6 @@
 package org.sonar.plugins.ndepend;
 
 import java.io.Reader;
-import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -29,7 +28,8 @@ import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.plugins.ndepend.NdependQuery.Scope;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableList.Builder;
 
 /**
  * Reads Ndepend queries from the rules.xml file.
@@ -39,22 +39,22 @@ import com.google.common.collect.Lists;
  */
 public class QueryLoader {
 
-  public List<NdependQuery> getQueries(Reader reader) {
+  public ImmutableList<NdependQuery> getQueries(Reader reader) {
     XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
     xmlFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
     xmlFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
     xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
     SMInputFactory inputFactory = new SMInputFactory(xmlFactory);
-    List<NdependQuery> queries = Lists.newArrayList();
+    ImmutableList.Builder<NdependQuery> builder = new Builder<NdependQuery>();
     try {
       SMHierarchicCursor root = inputFactory.rootElementCursor(reader);
       root.advance();
 
       SMInputCursor rules = root.childElementCursor("rule");
       while (rules.getNext() != null) {
-        queries.add(processRule(rules));
+        builder.add(processRule(rules));
       }
-      return queries;
+      return builder.build();
 
     } catch (XMLStreamException e) {
       throw new IllegalStateException("XML is not valid", e);
