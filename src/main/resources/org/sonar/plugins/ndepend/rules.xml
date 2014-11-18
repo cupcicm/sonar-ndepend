@@ -1,7 +1,7 @@
 <rules>
   <rule key="MethodsWithTooManyParameters">
     <severity>CRITICAL</severity>
-    <name><![CDATA[Methods with too many parameters]]></name>
+    <name><![CDATA[Method with too many parameters]]></name>
     <group>Code Quality</group>
     <scope>method</scope>
     <code><![CDATA[ warnif count > 0 from method in JustMyCode.Methods where method.NbParameters > 8]]></code>
