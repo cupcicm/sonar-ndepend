@@ -30,7 +30,7 @@ public class NdependQuery {
    */
   public enum Scope {
     METHOD,
-    CLASS
+    TYPE
   }
 
   private final String name;
