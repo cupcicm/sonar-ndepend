@@ -43,19 +43,19 @@ public class QueryLoaderTest {
 
     assertThat(queries.size()).isEqualTo(2);
     assertThat(queries.get(0).getScope()).isEqualTo(Scope.METHOD);
-    assertThat(queries.get(0).getName()).isEqualTo("Method with too many parameters");
-    assertThat(queries.get(1).getName()).isEqualTo("Too many lines in method");
+    assertThat(queries.get(0).getKey()).isEqualTo("MethodWithTooManyParameters");
+    assertThat(queries.get(1).getKey()).isEqualTo("MethodTooLong");
   }
 
   @Test
   public void TestCanLoadValidRule() {
     QueryLoader loader = new QueryLoader();
     List<NdependQuery> queries = loader.getQueries(
-        getRuleXml("<name>n</name><group>g</group><scope>method</scope><code>c</code>"));
+        getRuleXml("<key>n</key><group>g</group><scope>method</scope><code>c</code>"));
 
     assertThat(queries.size()).isEqualTo(1);
     assertThat(queries.get(0).getScope()).isEqualTo(Scope.METHOD);
-    assertThat(queries.get(0).getName()).isEqualTo("n");
+    assertThat(queries.get(0).getKey()).isEqualTo("n");
     assertThat(queries.get(0).getGroup()).isEqualTo("g");
   }
 
@@ -65,7 +65,7 @@ public class QueryLoaderTest {
     thrown.expect(AssertionError.class);
 
     // Missing a '<code>' element
-    loader.getQueries(getRuleXml("<name>n</name><group>g</group><scope>method</scope>"));
+    loader.getQueries(getRuleXml("<key>n</key><group>g</group><scope>method</scope>"));
   }
 
   @Test
@@ -74,10 +74,10 @@ public class QueryLoaderTest {
     thrown.expect(AssertionError.class);
 
     // Missing a '<scope>' element
-    loader.getQueries(getRuleXml("<name>n</name><group>g</group><code>c</code>"));
+    loader.getQueries(getRuleXml("<key>n</key><group>g</group><code>c</code>"));
   }
 
   private Reader getRuleXml(String content) {
-    return new StringReader(String.format("<rules><rule key=\"rule\">%s</rule></rules>", content));
+    return new StringReader(String.format("<rules><rule>%s</rule></rules>", content));
   }
 }

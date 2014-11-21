@@ -62,7 +62,7 @@ public class QueryLoader {
   }
 
   private NdependQuery processRule(SMInputCursor rule) throws XMLStreamException {
-    String name = null;
+    String key = null;
     String group = null;
     NdependQuery.Scope scope = null;
     String code = null;
@@ -72,9 +72,8 @@ public class QueryLoader {
     while (cursor.getNext() != null) {
       String nodeName = cursor.getLocalName();
 
-      if (StringUtils.equalsIgnoreCase("name", nodeName)) {
-        name = StringUtils.trim(cursor.collectDescendantText(false));
-
+      if (StringUtils.equalsIgnoreCase("key", nodeName)) {
+        key = StringUtils.trim(cursor.collectDescendantText(false));
       } else if (StringUtils.equalsIgnoreCase("group", nodeName)) {
         group = StringUtils.trim(cursor.collectDescendantText(false));
       } else if (StringUtils.equalsIgnoreCase("scope", nodeName)) {
@@ -83,11 +82,11 @@ public class QueryLoader {
         code = StringUtils.trim(cursor.collectDescendantText(false));
       }
     }
-    throwIfNull(name, line, "name");
+    throwIfNull(key, line, "key");
     throwIfNull(scope, line, "scope");
     throwIfNull(group, line, "group");
     throwIfNull(code, line, "code");
-    return new NdependQuery(name, group, scope, code);
+    return new NdependQuery(key, group, scope, code);
   }
 
   private void throwIfNull(Object what, int line, String item) {

@@ -76,7 +76,7 @@ public class QueryXmlSerializer {
   private String getData(NdependQuery query) {
     checkQuerySelectsVariable(query);
     StringBuilder builder = new StringBuilder();
-    builder.append(String.format("// <Name>%s</Name>\n", query.getName()));
+    builder.append(String.format("// <Name>%s</Name>\n", query.getKey()));
     builder.append(query.getCode());
     builder.append("\n\n");
     String variable = getVariableName(query.getScope());
@@ -92,7 +92,7 @@ public class QueryXmlSerializer {
         .format("from %s", getVariableName(query.getScope()));
     if (!query.getCode().contains(pattern)) {
       throw new IllegalArgumentException(String.format(
-          "Rule %s is invalid: it should contain '%s'", query.getName(),
+          "Rule %s is invalid: it should contain '%s'", query.getKey(),
           pattern));
     }
   }

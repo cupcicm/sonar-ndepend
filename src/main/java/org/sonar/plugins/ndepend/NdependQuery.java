@@ -33,7 +33,7 @@ public class NdependQuery {
     TYPE
   }
 
-  private final String name;
+  private final String key;
 
   private final String group;
 
@@ -41,15 +41,15 @@ public class NdependQuery {
 
   private final String code;
 
-  public NdependQuery(String name, String group, Scope scope, String code) {
-    this.name = name;
+  public NdependQuery(String key, String group, Scope scope, String code) {
+    this.key = key;
     this.group = group;
     this.scope = scope;
     this.code = code;
   }
 
-  public String getName() {
-    return name;
+  public String getKey() {
+    return key;
   }
 
   public String getGroup() {
