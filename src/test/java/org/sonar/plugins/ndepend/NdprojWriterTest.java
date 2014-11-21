@@ -33,7 +33,7 @@ import org.w3c.dom.Node;
 
 import com.google.common.base.Joiner;
 
-public class NdprojRewriterTest {
+public class NdprojWriterTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -42,7 +42,7 @@ public class NdprojRewriterTest {
   public void TestCanReplaceRulesElement() throws Exception {
     Document doc = prepareDocument(1);
     Writer writer = new StringWriter();
-    new NdprojRewriter(doc).writeTo(writer);
+    new NdprojWriter(doc).writeTo(writer);
     String xml = Joiner.on(System.getProperty("line.separator"))
                        .join(new String[] {"<root>", "<rules/>", "</root>", "" });
     assertThat(writer.toString()).endsWith(xml);
@@ -53,7 +53,7 @@ public class NdprojRewriterTest {
     Document doc = prepareDocument(0);
     Writer writer = new StringWriter();
     thrown.expect(IllegalArgumentException.class);
-    new NdprojRewriter(doc).writeTo(writer);
+    new NdprojWriter(doc).writeTo(writer);
   }
 
   @Test
@@ -61,7 +61,7 @@ public class NdprojRewriterTest {
     Document doc = prepareDocument(2);
     Writer writer = new StringWriter();
     thrown.expect(IllegalArgumentException.class);
-    new NdprojRewriter(doc).writeTo(writer);
+    new NdprojWriter(doc).writeTo(writer);
   }
 
   private Document prepareDocument(int howManyRulesElement) throws ParserConfigurationException {

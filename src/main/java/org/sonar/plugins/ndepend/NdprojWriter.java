@@ -44,11 +44,11 @@ import org.xml.sax.SAXException;
  * Note : It will delete all rules and replace them, not merely add
  * the new rules at the end.
  */
-public class NdprojRewriter {
+public class NdprojWriter {
 
   private final Document ndproj;
 
-  public NdprojRewriter(Document ndproj) {
+  public NdprojWriter(Document ndproj) {
     this.ndproj = ndproj;
     NodeList rulesElements = getRulesElement();
     if (rulesElements.getLength() == 0) {
@@ -60,11 +60,11 @@ public class NdprojRewriter {
   }
 
   /**
-   * Creates a rewriter from a .ndproj file.
+   * Creates a writer from a .ndproj file.
    */
-  public static NdprojRewriter fromFile(File file) throws SAXException, IOException, ParserConfigurationException {
+  public static NdprojWriter fromFile(File file) throws SAXException, IOException, ParserConfigurationException {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    return new NdprojRewriter(factory.newDocumentBuilder().parse(file));
+    return new NdprojWriter(factory.newDocumentBuilder().parse(file));
   }
 
   private NodeList getRulesElement() {
