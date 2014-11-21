@@ -53,13 +53,13 @@ public class NdependPlugin extends SonarPlugin {
         .onlyOnQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
         .build(),
 
-        PropertyDefinition.builder(NDEPEND_PATH_PROPERTY_KEY)
-          .name("Path to NDepend.Console.exe")
-          .description("Example: C:/ndepend/NDepend.Console.exe")
-          .defaultValue("C:/tools/ndepend/NDepend.Console.exe")
-          .category(CATEGORY)
-          .onQualifiers(Qualifiers.PROJECT)
-          .build()
-    );
+      PropertyDefinition.builder(NDEPEND_PATH_PROPERTY_KEY)
+        .name("Path to NDepend.Console.exe")
+        .description("Example: C:/ndepend/NDepend.Console.exe")
+        .defaultValue("C:/tools/ndepend/NDepend.Console.exe")
+        .category(CATEGORY)
+        .onQualifiers(Qualifiers.PROJECT)
+        .build()
+      );
   }
 }

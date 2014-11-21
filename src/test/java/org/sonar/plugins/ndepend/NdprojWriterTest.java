@@ -44,7 +44,7 @@ public class NdprojWriterTest {
     Writer writer = new StringWriter();
     new NdprojWriter(doc).writeTo(writer);
     String xml = Joiner.on(System.getProperty("line.separator"))
-                       .join(new String[] {"<root>", "<rules/>", "</root>", "" });
+      .join(new String[] {"<root>", "<rules/>", "</root>", ""});
     assertThat(writer.toString()).endsWith(xml);
   }
 
@@ -57,7 +57,7 @@ public class NdprojWriterTest {
   }
 
   @Test
-  public void TestCantInstantiateIfTooMany()throws Exception {
+  public void TestCantInstantiateIfTooMany() throws Exception {
     Document doc = prepareDocument(2);
     Writer writer = new StringWriter();
     thrown.expect(IllegalArgumentException.class);
