@@ -32,6 +32,7 @@ import org.sonar.api.utils.command.CommandExecutor;
 
 public class NdependSensor implements Sensor {
 
+  private static final long TIMEOUT = TimeUnit.MINUTES.toMillis(10);
   private final Settings settings;
 
   public NdependSensor(Settings settings) {
@@ -55,8 +56,7 @@ public class NdependSensor implements Sensor {
     Command cmd = Command.create(ndependPath).addArgument("/PersistHistoricAnalysisResult").addArgument(
       getNdProjFile(project).getAbsolutePath());
     try {
-      CommandExecutor.create()
-        .execute(cmd, TimeUnit.MINUTES.toMillis(10));
+      CommandExecutor.create().execute(cmd, TIMEOUT);
     } catch (CommandException e) {
       throw new IOError(e);
 

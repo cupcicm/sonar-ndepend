@@ -19,6 +19,10 @@ package org.sonar.plugins.ndepend;
 
 public class NdependConfig {
 
+  // Hide constructor of this utility class
+  private NdependConfig() {
+  }
+
   public static final String LANGUAGE_KEY = "cs";
 
   public static final String REPOSITORY_KEY = "cs-ndepend";
