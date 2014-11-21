@@ -1,0 +1,6 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{fae04ec0-301f-11d3-bf4b-00c04f79efbc}") = "Project", "Project.csproj", "{025eb2f6-aae5-4f86-a0df-b3c62b4a26ec}"
+EndProject
+Project("{fae04ec0-301f-11d3-bf4b-00c04f79efbc}") = "Project.UTest", "Project.UTest.csproj", "{1e70b28d-8402-416e-b0a4-11e64d929c94}"
+EndProject
