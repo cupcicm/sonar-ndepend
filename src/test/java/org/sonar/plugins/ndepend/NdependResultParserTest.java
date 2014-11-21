@@ -17,44 +17,36 @@
  */
 package org.sonar.plugins.ndepend;
 
-import org.xml.sax.SAXException;
-import org.w3c.dom.Document;
 import static org.fest.assertions.Assertions.assertThat;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 
 import org.junit.Test;
 
 public class NdependResultParserTest {
 
-  private Document getTestDoc() throws SAXException, IOException, ParserConfigurationException {
-    return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("src/test/resources/CodeRuleResult.xml");
+  private File getTestDoc() throws Exception {
+    return new File(getClass().getResource("/CodeRuleResult.xml").toURI());
   }
 
   @Test
-  public void getGroupAndRows() throws SAXException, IOException, ParserConfigurationException, XPathExpressionException {
-
-    final Document doc = getTestDoc();
-    final NdependResultParser parser = new NdependResultParser(doc);
+  public void getGroupAndRows() throws Exception {
+    final NdependResultParser parser = NdependResultParser.fromFile(getTestDoc());
 
     assertThat(parser.getGroups().getLength()).isEqualTo(1);
     assertThat(parser.getGroupRows(parser.getGroups().item(0)).getLength()).isEqualTo(5);
   }
 
   @Test
-  public void testParse() throws SAXException, IOException, ParserConfigurationException, XPathExpressionException {
-    final Document doc = getTestDoc();
-    final NdependResultParser parser = new NdependResultParser(doc);
+  public void testParse() throws Exception {
+    final NdependResultParser parser = NdependResultParser.fromFile(getTestDoc());
     final List<NdependIssue> issues = parser.parse();
     assertThat(issues.size()).isEqualTo(5);
     final NdependIssue sampleIssue = issues.get(0);
     assertThat(sampleIssue.getRuleKey()).isEqualTo("Method with too many parameters");
-    assertThat(sampleIssue.getMessage()).isEqualTo("Code Quality \\ Method with too many parameters");
+    assertThat(sampleIssue.getMessage()).isEqualTo(
+        "Code Quality \\ Method with too many parameters");
     assertThat(sampleIssue.getFile()).contains("WorkflowPlayer.cs");
     assertThat(sampleIssue.getLine()).isEqualTo(69);
   }

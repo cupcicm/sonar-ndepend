@@ -17,21 +17,25 @@
  */
 package org.sonar.plugins.ndepend;
 
-import com.google.common.annotations.VisibleForTesting;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
-import org.w3c.dom.Element;
-import com.google.common.collect.ImmutableList;
-
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import java.util.List;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
 
 public class NdependResultParser {
   private final Document doc;
@@ -44,9 +48,16 @@ public class NdependResultParser {
     this.issueBuilder = ImmutableList.builder();
   }
 
+  public static NdependResultParser fromFile(File file) throws SAXException, IOException,
+      ParserConfigurationException {
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    return new NdependResultParser(factory.newDocumentBuilder().parse(file));
+  }
+
   @VisibleForTesting
   NodeList getGroups() throws XPathExpressionException {
-    return (NodeList) this.xpath.compile("/RuleResult/Group/Query").evaluate(this.doc, XPathConstants.NODESET);
+    return (NodeList) this.xpath.compile("/RuleResult/Group/Query").evaluate(this.doc,
+        XPathConstants.NODESET);
   }
 
   @VisibleForTesting
@@ -67,11 +78,7 @@ public class NdependResultParser {
 
         String filePath = ((Element) vals.item(0)).getTextContent();
         int fileLine = Integer.parseInt(((Element) vals.item(1)).getTextContent());
-        issueBuilder.add(new NdependIssue(
-          ruleKey,
-          ruleDesc,
-          filePath,
-          fileLine));
+        issueBuilder.add(new NdependIssue(ruleKey, ruleDesc, filePath, fileLine));
       }
     }
     return issueBuilder.build();
