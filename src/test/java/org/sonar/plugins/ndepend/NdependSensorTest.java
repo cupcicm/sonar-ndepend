@@ -36,7 +36,7 @@ public class NdependSensorTest {
     NdependSensor sensor = new NdependSensor(settings);
 
     when(project.getPath()).thenReturn("");
-    when(settings.getString(NdependConfig.PROJECT_PATH_PROPERTY_KEY)).thenReturn("do-not-exists");
+    when(settings.getString(NdependConfig.SOLUTION_PATH_PROPERTY_KEY)).thenReturn("do-not-exists");
     assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 

@@ -28,9 +28,6 @@ import com.google.common.collect.ImmutableList;
 
 public class NdependPlugin extends SonarPlugin {
 
-  public static final String PROJECT_PATH_PROPERTY_KEY = "sonar.ndepend.projectPath";
-  public static final String NDEPEND_PATH_PROPERTY_KEY = "sonar.ndepend.ndependPath";
-
   private static final String CATEGORY = "Ndepend";
 
   /**
@@ -46,14 +43,14 @@ public class NdependPlugin extends SonarPlugin {
 
   private static ImmutableList<PropertyDefinition> pluginProperties() {
     return ImmutableList.of(
-      PropertyDefinition.builder(PROJECT_PATH_PROPERTY_KEY)
-        .name("Path to the .ndproj file")
-        .description("Example : myproject.ndproj")
+      PropertyDefinition.builder(NdependConfig.SOLUTION_PATH_PROPERTY_KEY)
+        .name("Path to the .sln file")
+        .description("Example: myproject.sln")
         .category(CATEGORY)
         .onlyOnQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
         .build(),
 
-      PropertyDefinition.builder(NDEPEND_PATH_PROPERTY_KEY)
+      PropertyDefinition.builder(NdependConfig.NDEPEND_PATH_PROPERTY_KEY)
         .name("Path to NDepend.Console.exe")
         .description("Example: C:/ndepend/NDepend.Console.exe")
         .defaultValue("C:/tools/ndepend/NDepend.Console.exe")

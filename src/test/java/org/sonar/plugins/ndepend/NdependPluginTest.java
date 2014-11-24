@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.sonar.api.config.PropertyDefinition;
+
 import com.google.common.collect.ImmutableSet;
 
 public class NdependPluginTest {
@@ -31,7 +32,7 @@ public class NdependPluginTest {
   @Test
   public void test() {
     assertThat(propertyKeys(new NdependPlugin().getExtensions())).containsOnly(
-      "sonar.ndepend.projectPath",
+      "sonar.ndepend.solutionPath",
       "sonar.ndepend.ndependPath");
   }
 

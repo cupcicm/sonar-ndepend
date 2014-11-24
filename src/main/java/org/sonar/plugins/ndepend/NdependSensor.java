@@ -41,7 +41,7 @@ public class NdependSensor implements Sensor {
 
   private File getNdProjFile(Project project) {
     return new File(project.getPath(),
-      settings.getString(NdependConfig.PROJECT_PATH_PROPERTY_KEY));
+        settings.getString(NdependConfig.SOLUTION_PATH_PROPERTY_KEY));
   }
 
   @Override
