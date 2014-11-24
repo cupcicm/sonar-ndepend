@@ -20,6 +20,7 @@ package org.sonar.plugins.ndepend;
 
 import java.io.File;
 import java.io.IOError;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.sonar.api.batch.fs.FileSystem;
@@ -31,6 +32,8 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.utils.command.Command;
 import org.sonar.api.utils.command.CommandException;
 import org.sonar.api.utils.command.CommandExecutor;
+import org.sonar.plugins.ndepend.ndproj.CsProjectParseError;
+import org.sonar.plugins.ndepend.ndproj.NdprojCreator;
 
 public class NdependSensor implements Sensor {
 
@@ -47,9 +50,21 @@ public class NdependSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    String ndependPath = settings.getString(NdependConfig.NDEPEND_PATH_PROPERTY_KEY);
-    Command cmd = Command.create(ndependPath).addArgument("/PersistHistoricAnalysisResult")
-        .addArgument(getNdProjFile(context.fileSystem()).getAbsolutePath());
+    File ndprojFile = getNdProjFile(context.fileSystem());
+    NdprojCreator creator = new NdprojCreator(settings);
+    try {
+      creator.create(ndprojFile);
+    } catch (IOException e) {
+      throw new IOError(e);
+    } catch (CsProjectParseError e) {
+      throw new RuntimeException(e);
+    }
+
+    String ndependPath = settings
+        .getString(NdependConfig.NDEPEND_PATH_PROPERTY_KEY);
+    Command cmd = Command.create(ndependPath)
+        .addArgument("/PersistHistoricAnalysisResult")
+        .addArgument(ndprojFile.getAbsolutePath());
     try {
       CommandExecutor.create().execute(cmd, TIMEOUT);
     } catch (CommandException e) {
