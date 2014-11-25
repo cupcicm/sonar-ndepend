@@ -19,10 +19,11 @@ package org.sonar.plugins.ndepend;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
+
+import com.google.common.base.Charsets;
 
 public class NdependRulesDefinition implements RulesDefinition {
 
@@ -37,8 +38,7 @@ public class NdependRulesDefinition implements RulesDefinition {
     NewRepository repository = context.createRepository(NdependConfig.REPOSITORY_KEY, NdependConfig.LANGUAGE_KEY);
     repository.setName("NDepend - C#");
     InputStream stream = getClass().getResourceAsStream("/org/sonar/plugins/ndepend/rules.xml");
-    xmlLoader.load(repository, new InputStreamReader(stream,
-        StandardCharsets.UTF_8));
+    xmlLoader.load(repository, new InputStreamReader(stream, Charsets.UTF_8));
     repository.done();
   }
 }
