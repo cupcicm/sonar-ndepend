@@ -17,27 +17,29 @@
  */
 package org.sonar.plugins.ndepend;
 
-import org.sonar.api.resources.Project;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-import static org.mockito.Mockito.when;
-import org.junit.Test;
-import org.sonar.api.config.Settings;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.Test;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
+import org.sonar.api.config.Settings;
 
 public class NdependSensorTest {
 
   @Test
-  public void shouldExecuteOnProjectWhenNdProjNotExists() {
-    Settings settings = mock(Settings.class);
-    Project project = mock(Project.class);
+  public void testSensorHasRightProperties() {
+    SensorDescriptor descriptor = mock(DefaultSensorDescriptor.class);
 
-    NdependSensor sensor = new NdependSensor(settings);
-
-    when(project.getPath()).thenReturn("");
-    when(settings.getString(NdependConfig.SOLUTION_PATH_PROPERTY_KEY)).thenReturn("do-not-exists");
-    assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
+    when(descriptor.createIssuesForRuleRepositories("cs-ndepend")).thenReturn(descriptor);
+    when(descriptor.workOnFileTypes(InputFile.Type.MAIN, InputFile.Type.TEST)).thenReturn(
+        descriptor);
+    when(descriptor.workOnLanguages("cs")).thenReturn(descriptor);
+    new NdependSensor(new Settings()).describe(descriptor);
+    verify(descriptor).workOnLanguages("cs");
+    verify(descriptor).createIssuesForRuleRepositories("cs-ndepend");
+    verify(descriptor).workOnFileTypes(InputFile.Type.MAIN, InputFile.Type.TEST);
   }
-
 }

@@ -22,10 +22,12 @@ import java.io.File;
 import java.io.IOError;
 import java.util.concurrent.TimeUnit;
 
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
 import org.sonar.api.utils.command.Command;
 import org.sonar.api.utils.command.CommandException;
 import org.sonar.api.utils.command.CommandExecutor;
@@ -39,27 +41,26 @@ public class NdependSensor implements Sensor {
     this.settings = settings;
   }
 
-  private File getNdProjFile(Project project) {
-    return new File(project.getPath(),
-        settings.getString(NdependConfig.SOLUTION_PATH_PROPERTY_KEY));
+  private File getNdProjFile(FileSystem filesystem) {
+    return new File(filesystem.baseDir(), "sonar.ndproj");
   }
 
   @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return getNdProjFile(project).exists();
-  }
-
-  @Override
-  public void analyse(Project project, SensorContext context) {
-    String ndependPath = settings
-      .getString(NdependConfig.NDEPEND_PATH_PROPERTY_KEY);
-    Command cmd = Command.create(ndependPath).addArgument("/PersistHistoricAnalysisResult").addArgument(
-      getNdProjFile(project).getAbsolutePath());
+  public void execute(SensorContext context) {
+    String ndependPath = settings.getString(NdependConfig.NDEPEND_PATH_PROPERTY_KEY);
+    Command cmd = Command.create(ndependPath).addArgument("/PersistHistoricAnalysisResult")
+        .addArgument(getNdProjFile(context.fileSystem()).getAbsolutePath());
     try {
       CommandExecutor.create().execute(cmd, TIMEOUT);
     } catch (CommandException e) {
       throw new IOError(e);
-
     }
+  }
+
+  @Override
+  public void describe(SensorDescriptor descriptor) {
+    descriptor.createIssuesForRuleRepositories(NdependConfig.REPOSITORY_KEY)
+        .workOnFileTypes(InputFile.Type.MAIN, InputFile.Type.TEST)
+        .workOnLanguages(NdependConfig.LANGUAGE_KEY);
   }
 }
