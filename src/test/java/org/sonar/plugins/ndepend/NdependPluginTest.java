@@ -17,15 +17,14 @@
  */
 package org.sonar.plugins.ndepend;
 
-import static org.fest.assertions.Assertions.assertThat;
+import com.google.common.collect.ImmutableSet;
+import org.junit.Test;
+import org.sonar.api.config.PropertyDefinition;
 
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
-import org.sonar.api.config.PropertyDefinition;
-
-import com.google.common.collect.ImmutableSet;
+import static org.fest.assertions.Assertions.assertThat;
 
 public class NdependPluginTest {
 
@@ -33,7 +32,8 @@ public class NdependPluginTest {
   public void test() {
     assertThat(propertyKeys(new NdependPlugin().getExtensions())).containsOnly(
       "sonar.ndepend.solutionPath",
-      "sonar.ndepend.ndependPath");
+      "sonar.ndepend.ndependPath",
+      "sonar.ndepend.rulesUri");
   }
 
   private static Set<String> propertyKeys(List extensions) {
