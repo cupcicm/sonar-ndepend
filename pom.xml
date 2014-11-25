@@ -119,6 +119,7 @@
   </dependencies>
 
   <build>
+    <finalName>sonar-ndepend</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
