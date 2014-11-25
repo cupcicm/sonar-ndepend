@@ -23,6 +23,8 @@ import java.io.IOError;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
@@ -37,6 +39,8 @@ import org.sonar.plugins.ndepend.ndproj.NdprojCreator;
 
 public class NdependSensor implements Sensor {
 
+  private static final Logger LOG = LoggerFactory
+      .getLogger(NdependSensor.class);
   private static final long TIMEOUT = TimeUnit.MINUTES.toMillis(10);
   private final Settings settings;
 
@@ -50,6 +54,8 @@ public class NdependSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
+    LOG.debug("Executing NDepend sensor...");
+
     File ndprojFile = getNdProjFile(context.fileSystem());
     NdprojCreator creator = new NdprojCreator(settings);
     try {
@@ -74,8 +80,11 @@ public class NdependSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
+    LOG.debug("Describing NDepend sensor...");
+
     descriptor.createIssuesForRuleRepositories(NdependConfig.REPOSITORY_KEY)
         .workOnFileTypes(InputFile.Type.MAIN, InputFile.Type.TEST)
-        .workOnLanguages(NdependConfig.LANGUAGE_KEY);
+        .workOnLanguages(NdependConfig.LANGUAGE_KEY)
+        .name("NDepend");
   }
 }
