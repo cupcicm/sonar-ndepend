@@ -27,8 +27,6 @@ public class NdependProvider {
   }
 
   public static List extensions() {
-    // TODO (m.cupcic): Add the RulesRepository.
-    // TODO (m.cupcic): Add the Sensor.
-    return ImmutableList.of();
+    return ImmutableList.of(NdependRulesDefinition.class, NdependSensor.class);
   }
 }
