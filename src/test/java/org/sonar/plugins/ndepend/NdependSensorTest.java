@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.config.Settings;
@@ -37,7 +38,7 @@ public class NdependSensorTest {
     when(descriptor.workOnFileTypes(InputFile.Type.MAIN, InputFile.Type.TEST)).thenReturn(
         descriptor);
     when(descriptor.workOnLanguages("cs")).thenReturn(descriptor);
-    new NdependSensor(new Settings()).describe(descriptor);
+    new NdependSensor(new Settings(), new DefaultFileSystem()).describe(descriptor);
     verify(descriptor).workOnLanguages("cs");
     verify(descriptor).createIssuesForRuleRepositories("cs-ndepend");
     verify(descriptor).workOnFileTypes(InputFile.Type.MAIN, InputFile.Type.TEST);

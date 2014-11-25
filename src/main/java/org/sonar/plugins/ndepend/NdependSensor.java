@@ -21,6 +21,7 @@ package org.sonar.plugins.ndepend;
 import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -30,7 +31,9 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.issue.internal.DefaultIssueBuilder;
 import org.sonar.api.config.Settings;
+import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.command.Command;
 import org.sonar.api.utils.command.CommandException;
 import org.sonar.api.utils.command.CommandExecutor;
@@ -43,9 +46,11 @@ public class NdependSensor implements Sensor {
       .getLogger(NdependSensor.class);
   private static final long TIMEOUT = TimeUnit.MINUTES.toMillis(10);
   private final Settings settings;
+  private final FileSystem fileSystem;
 
-  public NdependSensor(Settings settings) {
+  public NdependSensor(Settings settings, FileSystem fileSystem) {
     this.settings = settings;
+    this.fileSystem = fileSystem;
   }
 
   private File getNdProjFile(FileSystem filesystem) {
@@ -73,6 +78,7 @@ public class NdependSensor implements Sensor {
         .addArgument(ndprojFile.getAbsolutePath());
     try {
       CommandExecutor.create().execute(cmd, TIMEOUT);
+      analyzeResults(context);
     } catch (CommandException e) {
       throw new IOError(e);
     }
@@ -81,10 +87,30 @@ public class NdependSensor implements Sensor {
   @Override
   public void describe(SensorDescriptor descriptor) {
     LOG.debug("Describing NDepend sensor...");
-
     descriptor.createIssuesForRuleRepositories(NdependConfig.REPOSITORY_KEY)
         .workOnFileTypes(InputFile.Type.MAIN, InputFile.Type.TEST)
-        .workOnLanguages(NdependConfig.LANGUAGE_KEY)
-        .name("NDepend");
+        .workOnLanguages(NdependConfig.LANGUAGE_KEY).name("NDepend");
+  }
+
+  private void analyzeResults(SensorContext context) {
+    List<NdependIssue> issues;
+    try {
+      File resultsFolder = new File(fileSystem.baseDir().getAbsolutePath(),
+          NdependConfig.NDEPEND_RESULTS_FOLDER);
+      File resultsFile = new File(resultsFolder,
+          NdependConfig.NDEPEND_RESULTS_FILENAME);
+      issues = NdependResultParser.fromFile(resultsFile).parse();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
+    for (NdependIssue issue : issues) {
+      Resource r = null;
+      InputFile file = fileSystem.inputFile(fileSystem.predicates().is(
+          new File(issue.getFile())));
+      DefaultIssueBuilder b = new DefaultIssueBuilder();
+      context.addIssue(b.onFile(file).atLine(issue.getLine())
+          .message(issue.getMessage()).withKey(issue.getRuleKey()).build());
+    }
   }
 }
